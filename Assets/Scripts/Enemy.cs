@@ -32,9 +32,7 @@ public class Enemy : MonoBehaviour {
     {
         waypoints = waypointParent.GetComponentsInChildren<Transform>();
     }
-
-
-
+    
     // Update is called once per frame
     void Update ()
     {

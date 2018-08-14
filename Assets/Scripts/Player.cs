@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public Camera cam;
+
     public GameObject weapon;
 
     public float speed = 6.0F;
@@ -14,7 +16,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        //check if space is pressed
+        //check if leftClick is pressed
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             weapon.SetActive(true);
@@ -22,6 +24,9 @@ public class Player : MonoBehaviour
 
         if (controller.isGrounded)
         {
+            Vector3 euler = cam.transform.eulerAngles;
+            transform.rotation = Quaternion.AngleAxis(euler.y, Vector3.up);
+
             moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
             moveDirection = transform.TransformDirection(moveDirection);
             moveDirection *= speed;
