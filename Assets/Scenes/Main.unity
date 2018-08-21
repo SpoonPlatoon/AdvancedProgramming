@@ -1079,7 +1079,7 @@ GameObject:
   m_Layer: 0
   m_Name: Waypoint (2)
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 3443629218296621865, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -1298,7 +1298,13 @@ Prefab:
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 114986502954312704, guid: c274c0051efc5b8479d62a8d16580de0,
+        type: 2}
+      propertyPath: camRadius
+      value: 0.4
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 136685508930546426, guid: c274c0051efc5b8479d62a8d16580de0, type: 2}
   m_SourcePrefab: {fileID: 100100000, guid: c274c0051efc5b8479d62a8d16580de0, type: 2}
   m_IsPrefabAsset: 0
 --- !u!4 &315373463 stripped
@@ -2235,7 +2241,7 @@ GameObject:
   m_Layer: 0
   m_Name: Waypoint (1)
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 3443629218296621865, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -7710,7 +7716,7 @@ GameObject:
   m_Layer: 0
   m_Name: Waypoint (3)
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 3443629218296621865, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -9234,6 +9240,11 @@ Transform:
   m_Father: {fileID: 923756143}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1341419499 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4655437318980728, guid: c274c0051efc5b8479d62a8d16580de0,
+    type: 2}
+  m_PrefabInternal: {fileID: 240315806}
 --- !u!43 &1387288561
 Mesh:
   m_ObjectHideFlags: 0
@@ -53184,7 +53195,7 @@ GameObject:
   m_Layer: 0
   m_Name: Waypoint (4)
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 3443629218296621865, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -53766,12 +53777,7 @@ Prefab:
         type: 2}
       propertyPath: target
       value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 195902913924099844, guid: 92a00486068a25541a032072269336c3,
-        type: 2}
-      propertyPath: m_StoppingDistance
-      value: 1
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1341419499}
     - target: {fileID: 114610192839034438, guid: 92a00486068a25541a032072269336c3,
         type: 2}
       propertyPath: waypointParent

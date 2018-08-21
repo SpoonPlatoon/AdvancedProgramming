@@ -6,6 +6,13 @@ using UnityEngine;
 using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour {
+
+    public enum State
+    {
+        Patrol,
+        Seek
+    }
+
     public int Health
     {
         get
@@ -14,17 +21,23 @@ public class Enemy : MonoBehaviour {
         }
     }
 
+    public State currentState = State.Patrol;
+
     public NavMeshAgent agent;
     public Transform target;
     public Transform waypointParent;
     public float distanceToWaypoint = 1f;
-
-    public bool loop = false;
-    private bool pingPong = false;
+    public float detectionRadius = 5f;
 
     private int health = 100;
     private Transform[] waypoints;
     private int currentIndex = 1;
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, detectionRadius);
+    }
 
 
     // Start is called just before any of the Update methods is called the first time
@@ -32,71 +45,81 @@ public class Enemy : MonoBehaviour {
     {
         waypoints = waypointParent.GetComponentsInChildren<Transform>();
     }
-    
+
+    void Patrol()
+    {
+        if (currentIndex >= waypoints.Length)
+        {
+            currentIndex = 1;
+        }
+
+        Transform point = waypoints[currentIndex];
+
+        float distance = Vector3.Distance(transform.position, point.position);
+        if (distance <= distanceToWaypoint)
+        {
+            currentIndex++;
+        }
+
+        agent.SetDestination(point.position);
+
+        //get distance to target
+        float distToTarget = Vector3.Distance(transform.position, target.position);
+        //if distance to target is less then detection radius (within range)
+        if(distToTarget <= detectionRadius)
+        {
+            //switch to seek state
+            currentState = State.Seek;
+        }
+
+    }
+
+    void Seek()
+    {
+        //update the AI's target position
+        agent.SetDestination(target.position);
+
+        //get distance to target
+        float distToTarget = Vector3.Distance(transform.position, target.position);
+        //if distance to target is greater than detection radius (out of range)
+        if (distToTarget >= detectionRadius)
+        {
+            //switch to patrol state
+            currentState = State.Patrol;
+        }
+    }
+
     // Update is called once per frame
     void Update ()
     {
-        if (target) //if target is set
+        switch (currentState)
         {
-            //update the AI's target position
-            agent.SetDestination(target.position);
+            case State.Patrol:
+                Patrol();
+                break;
+            case State.Seek:
+                Seek();
+                break;
+            default:
+                break;
         }
-        else
-        {
-            //if currentIndex exceeds size of array
-            if(currentIndex >= waypoints.Length)
-            {
-                if (loop)
-                {
-                    //reset back to "first" element
-                    currentIndex = 1;
-                }
-                else
-                {
-                    //cap the index if its greater
-                    currentIndex = waypoints.Length - 1;
-                    //reverse it
-                    pingPong = true;
-                }
-            }
+    }
 
-            if (currentIndex <= 0)
-            {
-                if (loop)
-                {
-                    //reset back to "first" element
-                    currentIndex = waypoints.Length - 1;
-                }
-                else
-                {
-                    //cap the index if its greater
-                    currentIndex = 1;
-                    //reverse it
-                    pingPong = false;
-                }
-            }
+    //void FixedUpdate()
+    //{
+    //    Collider[] hits = Physics.OverlapSphere(transform.position, detectionRadius);
+    //    foreach (var hit in hits)
+    //    {
+    //        Player player = hit.GetComponent<Player>();
+    //        if (player)
+    //        {
+    //            target = player.transform;
+    //            return;
+    //        }
+    //    }
 
-            Transform point = waypoints[currentIndex];
-
-            float distance = Vector3.Distance(transform.position, point.position);
-            if(distance <= distanceToWaypoint)
-            {
-                if (pingPong)
-                {
-                    //move to previous waypoint
-                    currentIndex--;
-                }
-                else
-                {
-                    currentIndex++;
-                }
-            }
-
-            //set new target to next waypoint
-            agent.SetDestination(point.position);
-
-        }
-	}
+    //    target = null;
+    //}
 
     public void DealDamage(int damageDealt)
     {
@@ -107,3 +130,5 @@ public class Enemy : MonoBehaviour {
         }
     }
 }
+
+
