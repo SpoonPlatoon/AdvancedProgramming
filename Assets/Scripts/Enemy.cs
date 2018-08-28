@@ -29,6 +29,10 @@ public class Enemy : MonoBehaviour {
     public float distanceToWaypoint = 1f;
     public float detectionRadius = 5f;
 
+    public FieldOfView fov;
+    public AudioSource alertSound;
+    public GameObject alertSymbol;
+
     private int health = 100;
     private Transform[] waypoints;
     private int currentIndex = 1;
@@ -46,8 +50,17 @@ public class Enemy : MonoBehaviour {
         waypoints = waypointParent.GetComponentsInChildren<Transform>();
     }
 
+    IEnumerator SeekDelay()
+    {
+        yield return new WaitForSeconds(1f);
+        currentState = State.Patrol;
+        target = null;
+    }
+
     void Patrol()
     {
+        alertSymbol.SetActive(false);//Gameobject
+
         if (currentIndex >= waypoints.Length)
         {
             currentIndex = 1;
@@ -63,14 +76,19 @@ public class Enemy : MonoBehaviour {
 
         agent.SetDestination(point.position);
 
-        //get distance to target
-        float distToTarget = Vector3.Distance(transform.position, target.position);
-        //if distance to target is less then detection radius (within range)
-        if(distToTarget <= detectionRadius)
+        if(fov.visibleTargets.Count > 0)
         {
-            //switch to seek state
+            //Set the target to the first one
+            target = fov.visibleTargets[0];
+            //Switch to seek state
             currentState = State.Seek;
+            //Detected
+            alertSound.Play(); //Audiosource
+            alertSymbol.SetActive(true);//Gameobject
         }
+        
+
+
 
     }
 
@@ -84,8 +102,7 @@ public class Enemy : MonoBehaviour {
         //if distance to target is greater than detection radius (out of range)
         if (distToTarget >= detectionRadius)
         {
-            //switch to patrol state
-            currentState = State.Patrol;
+            StartCoroutine(SeekDelay());
         }
     }
 
