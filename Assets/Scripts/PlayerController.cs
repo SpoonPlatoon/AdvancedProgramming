@@ -8,6 +8,11 @@ public class PlayerController : MonoBehaviour
     public Camera cam;
 
     public GameObject weapon;
+    public GameObject Gun;
+    public GameObject GunFire;
+    public GameObject SelectedWeapon;
+
+    public int x = 1;
 
     public bool isJumping;
     public float speed = 6.0F;
@@ -36,6 +41,7 @@ public class PlayerController : MonoBehaviour
     {
         moveDirection.y -= gravity * Time.deltaTime;
         controller.Move(moveDirection * Time.deltaTime);
+        WeaponSwap();
     }
 
     public void Attack()
@@ -43,7 +49,52 @@ public class PlayerController : MonoBehaviour
         //check if leftClick is pressed
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            weapon.SetActive(true);
+            if(SelectedWeapon == Gun)
+            {
+                Debug.Log("BANG");
+                GunFire.SetActive(true);
+
+            }
+
+            if (SelectedWeapon == weapon)
+            {
+                SelectedWeapon.SetActive(true);
+                Debug.Log("SCHWING");
+            }
+        }
+    }
+
+    public void WeaponSwap()
+    {
+        if (Input.GetAxis("Mouse ScrollWheel") > 0f) // forward
+        {
+            x++;
+        }
+        else if (Input.GetAxis("Mouse ScrollWheel") < 0f) // backwards
+        {
+            x--;
+        }
+
+        if(x == 1)
+        {
+            SelectedWeapon = Gun;
+            Gun.SetActive(true);
+        }
+
+        if (x == 0)
+        {
+            SelectedWeapon = weapon;
+            Gun.SetActive(false);
+        }
+
+        if (x > 1)
+        {
+            x = 0;
+        }
+
+        if(x < 0)
+        {
+            x = 1;
         }
     }
 }

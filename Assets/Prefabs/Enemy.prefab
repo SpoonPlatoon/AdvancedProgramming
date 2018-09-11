@@ -27,7 +27,7 @@ GameObject:
   - component: {fileID: 114356232616729012}
   m_Layer: 0
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -202,6 +202,9 @@ MonoBehaviour:
   waypointParent: {fileID: 0}
   distanceToWaypoint: 2
   detectionRadius: 5
+  fov: {fileID: 0}
+  alertSound: {fileID: 0}
+  alertSymbol: {fileID: 0}
 --- !u!136 &136578329109544972
 CapsuleCollider:
   m_ObjectHideFlags: 1

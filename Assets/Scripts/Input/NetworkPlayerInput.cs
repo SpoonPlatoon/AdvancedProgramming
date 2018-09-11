@@ -36,6 +36,14 @@ public class NetworkPlayerInput : NetworkBehaviour
             {
                 controller.Attack();
             }
+            if (Input.GetAxis("Mouse ScrollWheel") > 0f) // forward
+            {
+                controller.x++;
+            }
+            else if (Input.GetAxis("Mouse ScrollWheel") < 0f) // backwards
+            {
+                controller.x--;
+            }
         }
 	}
 }
