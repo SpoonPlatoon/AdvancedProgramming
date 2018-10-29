@@ -20,7 +20,23 @@ public class PlayerController : MonoBehaviour
     public float gravity = 20.0F;
     private Vector3 moveDirection = Vector3.zero;
     public CharacterController controller;
-    
+
+    public void Start()
+    {
+        if (GameSave.Exists())
+        {
+            GameData data = GameSave.GetData();
+            transform.position = data.playerPosition;
+        }
+    }
+    private void OnDestroy()
+    {
+        // Save position when player is destroyed
+        GameData data = GameSave.GetData();
+        data.playerPosition = transform.position;
+        GameSave.Instance.Save();
+    }
+
     public void Move(float inputH, float inputV, bool isJumping)
     {
         if (controller.isGrounded)
