@@ -7,6 +7,8 @@ using System.Xml; //Includes XML classes
 using System.Xml.Serialization; //Includes ability to 'serialize' classes
 using System.IO; //Adds file io functionality
 
+using System;
+/*
 [XmlRoot("Game Data")]
 public class GameData
 {
@@ -41,7 +43,14 @@ public class GameData
         }
     }
 }
+*/
 
+[Serializable]
+public class GameData
+{
+    public Vector3 playerPosition;
+    public int score;
+}
 public class GameSave : MonoBehaviour
 {
     #region Singleton
@@ -68,8 +77,10 @@ public class GameSave : MonoBehaviour
     public void Save()
     {
         // C:/Users/Manny/AppData/Local/CompanyName/ProductName/GameSave.xml
-        string fullPath = Application.dataPath + "/Data/" + fileName + ".xml";
-        data.Save(fullPath);
+        string fullPath = Application.dataPath + "/Data/" + fileName + ".json";
+        //data.Save(fullPath);
+        string json = JsonUtility.ToJson(data);
+        File.WriteAllText(fullPath, json);
 
         //Display where the file saved
         print("Saved to path: " + fullPath);
@@ -78,16 +89,17 @@ public class GameSave : MonoBehaviour
     public void Load()
     {
         // C:/Users/Manny/AppData/Local/CompanyName/ProductName/GameSave.xml
-        string fullPath = Application.dataPath + "/Data/" + fileName + ".xml";
-        data.Load(fullPath);
-
+        string fullPath = Application.dataPath + "/Data/" + fileName + ".json";
+        //data.Load(fullPath);
+        string json = File.ReadAllText(fullPath);
+        data = JsonUtility.FromJson<GameData>(json);
         //Display where the file saved
         print("Loaded from path: " + fullPath);
     }
 
     public static bool Exists()
     {
-        string fullPath = Application.dataPath + "/Data/" + Instance.fileName + ".xml";
+        string fullPath = Application.dataPath + "/Data/" + Instance.fileName + ".json";
         return File.Exists(fullPath);
     }
 }
